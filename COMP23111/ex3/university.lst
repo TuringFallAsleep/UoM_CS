@@ -1,0 +1,118 @@
+SQL> /* Task1 (a i.) */
+SQL>  select distinct name
+  2   from student
+  3   where id in (select id from takes
+  4  	     where course_id like '%CS%');
+
+NAME                                                                            
+--------------------                                                            
+Zhang                                                                           
+Brown                                                                           
+Bourikas                                                                        
+Shankar                                                                         
+Levy                                                                            
+Williams                                                                        
+
+6 rows selected.
+
+SQL> 
+SQL> /* Task1 (a ii.) */
+SQL> select id,name from student where id not in (select id from takes where year<2009);
+
+ID    NAME                                                                      
+----- --------------------                                                      
+54321 Williams                                                                  
+98765 Bourikas                                                                  
+00128 Zhang                                                                     
+98988 Tanaka                                                                    
+45678 Levy                                                                      
+44553 Peltier                                                                   
+23121 Chavez                                                                    
+19991 Brandt                                                                    
+12345 Shankar                                                                   
+76653 Aoi                                                                       
+76543 Brown                                                                     
+
+ID    NAME                                                                      
+----- --------------------                                                      
+55739 Sanchez                                                                   
+70557 Snow                                                                      
+
+13 rows selected.
+
+SQL> 
+SQL> /* Task1 (a iii.) */
+SQL> select dept_name, max(salary) as max_salary from instructor
+  2  group by dept_name;
+
+DEPT_NAME            MAX_SALARY                                                 
+-------------------- ----------                                                 
+Elec. Eng.                80000                                                 
+Physics                   95000                                                 
+Comp. Sci.                92000                                                 
+Finance                   90000                                                 
+Biology                   72000                                                 
+Music                     40000                                                 
+History                   62000                                                 
+
+7 rows selected.
+
+SQL> 
+SQL> /* Task1 (a iv.) */
+SQL> select min(max_salary) from (
+  2  select dept_name as max_dept, max(salary) as max_salary from instructor
+  3  group by dept_name);
+
+MIN(MAX_SALARY)                                                                 
+---------------                                                                 
+          40000                                                                 
+
+SQL> 
+SQL> 
+SQL> /* Task1 (b i.) */
+SQL> insert into course values ('CS-001', 'Weekly Seminar', 'Comp. Sci.', '10');
+
+1 row created.
+
+SQL> 
+SQL> /* Task1 (b ii.) */
+SQL> -- insert into course values ('CS-002', 'Monthly Seminar', 'Comp. Sci.', '0');
+SQL> /* Task1 (b iii.) */
+SQL> -- The error is based on the declaration of create table course() which requires the credit is larger than 0
+SQL> 
+SQL> /* Task1 (b iv.) */
+SQL> insert into section values ('CS-001', '1', 'Fall', '2009', 'Painter', '514', 'C');
+
+1 row created.
+
+SQL> /* Task1 (b v.) */
+SQL> -- The columns assumed regarding missing are: building is Painter, room_number is 514, time_slot_id is C.
+SQL> 
+SQL> /* Task1 (b vi.) */
+SQL> insert into takes select distinct id ,'CS-001', '1', 'Fall', '2009', 'C'
+  2  	     from student where dept_name = 'Comp. Sci.';
+
+4 rows created.
+
+SQL> 
+SQL> /* Task1 (b vii.) */
+SQL> delete from takes where id = (select id from student where name like '%Zhang%')
+  2   and course_id = (select course_id from section where course_id = 'CS-001');
+
+1 row deleted.
+
+SQL> 
+SQL> /* Task1 (b viii.) */
+SQL> delete from takes where
+  2  course_id = (select course_id from course where upper(title) like upper('%database%'));
+
+2 rows deleted.
+
+SQL> 
+SQL> /* Task1 (b ix.) */
+SQL> delete from course where course_id = 'CS-001';
+
+1 row deleted.
+
+SQL> 
+SQL> SPOOL OFF

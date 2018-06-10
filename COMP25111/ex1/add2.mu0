@@ -1,0 +1,28 @@
+Start:	LDA X
+	SUB Y
+	STO Judge
+	JGE YLoop	
+XLoop:	LDA X
+	ADD NegOne
+	STO X
+	JGE XLoop1
+	JMP end
+XLoop1:	LDA Result
+	ADD Y
+	STO Result
+	JMP XLoop
+YLoop:	LDA Y
+	ADD NegOne
+	STO Y
+	JGE YLoop1
+	JMP end
+YLoop1:	LDA Result
+	ADD X
+	STO Result
+	JMP YLoop
+end:	STP
+X:	2
+Y:	30
+Judge: 	0
+NegOne:	-1
+Result:	0

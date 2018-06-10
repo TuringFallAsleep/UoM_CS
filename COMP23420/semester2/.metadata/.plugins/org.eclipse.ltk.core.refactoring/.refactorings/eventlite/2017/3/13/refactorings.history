@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;event&apos; in &apos;uk.ac.man.cs.eventlite.dao.EventServiceImpl.searchByName(...)&apos; to &apos;eventName&apos;&#x0A;- Original project: &apos;eventlite&apos;&#x0A;- Original element: &apos;uk.ac.man.cs.eventlite.dao.EventServiceImpl.searchByName(String).event&apos;&#x0A;- Renamed element: &apos;event&apos;&#x0A;- Update references to refactored element" description="Rename local variable &apos;event&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src\/main\/java&lt;uk.ac.man.cs.eventlite.dao{EventServiceImpl.java[EventServiceImpl~searchByName~QString;@event!822!833!829!833!QString;!0!true" name="eventName" references="true" stamp="1490875824955" version="1.0"/>
+</session>

@@ -1,0 +1,79 @@
+package uk.ac.man.cs.eventlite.controllers;
+
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import uk.ac.man.cs.eventlite.TestParent;
+import uk.ac.man.cs.eventlite.dao.EventService;
+import uk.ac.man.cs.eventlite.dao.VenueService;
+import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Venue;
+
+@AutoConfigureMockMvc
+public class VenuesControllerRestTest extends TestParent {
+
+	@Autowired
+	private MockMvc mvc;
+	
+	@Autowired
+	private EventService eventService;
+	
+	@Autowired
+	private VenueService venueService;
+
+	@Test
+	public void testGetAllVenues() throws Exception {
+
+		mvc.perform(get("/venues").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.title", equalTo("EventLite Venues")))
+			.andExpect(jsonPath("$._self", equalTo("http://localhost/venues")))
+			.andExpect(model().attributeExists("venues"));
+		
+	}
+	
+//	@Test
+//	public void testShowAllVenues() throws Exception {
+// 		
+//		mvc.perform(get("/venues").accept(MediaType.APPLICATION_JSON))
+//			.andExpect(status().isOk())
+//			.andExpect(model().attributeExists("venues"));
+//	}
+	
+	@Test
+	public void testShowAllVenues() throws Exception {
+ 		List<Venue> venues = (List<Venue>) venueService.findAll();
+			
+		
+		
+		for (int i = 0; i < venues.size(); i++)
+		{
+			int venueId = (int) venues.get(i).getId();
+			String venueName = venues.get(i).getName();
+			int capacity = venues.get(i).getCapacity();
+			String roadname =(String) venues.get(i).getRoadname();
+			String postcode =(String) venues.get(i).getPostcode();
+			
+			mvc.perform(get("/venues").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+					.andExpect(jsonPath("$.venues[*].id", hasItem(venueId)))
+					.andExpect(jsonPath("$.venues[*].name", hasItem(venueName)))
+					.andExpect(jsonPath("$.venues[*].capacity", hasItem(capacity)))
+					.andExpect(jsonPath("$.venues[*].roadname", hasItem(roadname)))
+					.andExpect(jsonPath("$.venues[*].postcode", hasItem(postcode)))
+					.andExpect(jsonPath("$.venues[*]._self", hasItem("http://localhost/venues/" + venueId)))
+					.andExpect(jsonPath("$.venues[*].events", hasItem("http://localhost/venues/" + venueId + "/events")));
+		}
+	}
+}

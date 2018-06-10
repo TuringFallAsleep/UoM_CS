@@ -1,0 +1,512 @@
+SQL> start /opt/info/courses/COMP23111/create-Eclectic-Ecommerce-tables.sql
+SQL> create table customerInfo (
+  2  	    loginName varchar(10) primary key,
+  3  	    password  varchar(15) not null,
+  4  	    firstName varchar(20) not null,
+  5  	    lastName  varchar(20) not null,
+  6  	    email     varchar(20) not null,
+  7  	    cStreet   varchar(20) not null,
+  8  	    cState    varchar(2) not null,
+  9  	    cZip      varchar(6) not null
+ 10  );
+
+Table created.
+
+SQL> 
+SQL> create table orderCartInfo (
+  2  	    orderCartId varchar(10) primary key,
+  3  	    oType	varchar(15) not null check (oType in ('S', 'O')),
+  4  	    oYear	int	    not null,
+  5  	    oMonth	int	    not null,
+  6  	    oDay	int	    not null,
+  7  	    customerID	varchar(10) not null
+  8  			references customerInfo(loginName) on delete cascade
+  9  );
+
+Table created.
+
+SQL> 
+SQL> create table category (
+  2  	    categoryId	varchar(10) primary key,
+  3  	    description varchar(50)
+  4  );
+
+Table created.
+
+SQL> 
+SQL> create table itemType (
+  2  	    itemNum   varchar(10) primary key,
+  3  	    name      varchar(20) not null,
+  4  	    picture   varchar(50),
+  5  	    price     float	  not null,
+  6  	    belongsTo varchar(10) not null
+  7  		      references category(categoryId) on delete cascade
+  8  );
+
+Table created.
+
+SQL> 
+SQL> create table inventoryItem (
+  2  	    itemNum    varchar(10) not null
+  3  		       references itemType(itemNum) on delete cascade,
+  4  	    code       varchar(20) not null,
+  5  	    qtyInstock float	   not null,
+  6  	    itemColor  varchar(15),
+  7  	    itemSize   float,
+  8  	    primary key (itemNum, code)
+  9  );
+
+Table created.
+
+SQL> 
+SQL> create table lineItems (
+  2  	    orderCartId varchar(10) not null
+  3  			references orderCartInfo(orderCartId) on delete cascade,
+  4  	    itemNum	varchar(10) not null
+  5  			references itemType(itemNum) on delete cascade,
+  6  	    code	varchar(20) not null,
+  7  	    qtyOrdered	float	    not null,
+  8  	    orderPrice	float	    not null,
+  9  	    primary key (orderCartId, itemNum, code)
+ 10  );
+
+Table created.
+
+SQL> 
+SQL> start /opt/info/courses/COMP23111/populate-Eclectic-Ecommerce-tables.sql
+SQL> 
+SQL> insert into customerInfo values ('choizeznyc', 'KJH*GS9', 'John', 'Booker', 'jb@choizez-nyc.com', '202 East 78th', 'NY', '10021');
+
+1 row created.
+
+SQL> insert into customerInfo values ('shkeandco', 'JHKG*!9S', 'Mary', 'Folio', 'mf@shkeandco.com', '993 Lexington Ave', 'NY', '10065');
+
+1 row created.
+
+SQL> insert into customerInfo values ('dramab', 'KG454*56Skl', 'Ophelia', 'Elsinore', 'oe@dramab.com', '502 West 40th', 'NY', '10018');
+
+1 row created.
+
+SQL> insert into customerInfo values ('astrab', '4!2!3kjn3e', 'Percy', 'Byron', 'pb@astrab.com', '92 31st', 'NY', '11106');
+
+1 row created.
+
+SQL> 
+SQL> insert into orderCartInfo values ('1', 'S', 2015, 12, 23, 'shkeandco');
+
+1 row created.
+
+SQL> insert into orderCartInfo values ('2', 'S', 2015, 08, 03, 'dramab');
+
+1 row created.
+
+SQL> insert into orderCartInfo values ('3', 'S', 2015, 12, 23, 'astrab');
+
+1 row created.
+
+SQL> insert into orderCartInfo values ('4', 'O', 2015, 08, 03, 'astrab');
+
+1 row created.
+
+SQL> insert into orderCartInfo values ('5', 'S', 2015, 09, 18, 'shkeandco');
+
+1 row created.
+
+SQL> insert into orderCartInfo values ('6', 'S', 2015, 06, 03, 'shkeandco');
+
+1 row created.
+
+SQL> insert into orderCartInfo values ('7', 'S', 2015, 12, 12, 'dramab');
+
+1 row created.
+
+SQL> insert into orderCartInfo values ('8', 'O', 2015, 08, 28, 'astrab');
+
+1 row created.
+
+SQL> 
+SQL> insert into category values ('F',	'fiction');
+
+1 row created.
+
+SQL> insert into category values ('H',	'history');
+
+1 row created.
+
+SQL> insert into category values ('P',	'poetry');
+
+1 row created.
+
+SQL> insert into category values ('C',	'crime');
+
+1 row created.
+
+SQL> insert into category values ('SF', 'sci-fi');
+
+1 row created.
+
+SQL> 
+SQL> insert into itemType values ('A0', 'The Anarchy of Mask', '***', 10.99, 'P');
+
+1 row created.
+
+SQL> insert into itemType values ('A1', 'The Butler Did', '---', 11.99, 'C');
+
+1 row created.
+
+SQL> insert into itemType values ('A2', 'The Abolished Man', '===', 15.99, 'SF');
+
+1 row created.
+
+SQL> insert into itemType values ('A3', 'Lyrical Bullets', '+-+-', 20.99, 'P');
+
+1 row created.
+
+SQL> insert into itemType values ('B1', 'The Postlude', '=\=\=', 34.99, 'P');
+
+1 row created.
+
+SQL> insert into itemType values ('C1', 'The August of Guns', '**--', 10.99, 'H');
+
+1 row created.
+
+SQL> insert into itemType values ('C2', 'The Expectant Mirror', '^-^', 12.99, 'H');
+
+1 row created.
+
+SQL> 
+SQL> insert into inventoryItem values ('A0', 'pbk', 30, 'black', 3.0);
+
+1 row created.
+
+SQL> insert into inventoryItem values ('B1', 'hbk', 50, 'white', 4.0);
+
+1 row created.
+
+SQL> insert into inventoryItem values ('A0', 'hbk', 25, 'green', 4.0);
+
+1 row created.
+
+SQL> insert into inventoryItem values ('C2', 'hbk', 20, 'black', 3.0);
+
+1 row created.
+
+SQL> insert into inventoryItem values ('C1', 'ebk', 70, 'black', 4.0);
+
+1 row created.
+
+SQL> insert into inventoryItem values ('A3', 'pbk', 30, 'black', 2.0);
+
+1 row created.
+
+SQL> insert into inventoryItem values ('A2', 'pbk', 50, 'green', 3.0);
+
+1 row created.
+
+SQL> insert into inventoryItem values ('A0', 'ebk', 15, 'green', 4.0);
+
+1 row created.
+
+SQL> insert into inventoryItem values ('C2', 'pbk', 30, 'black', 3.0);
+
+1 row created.
+
+SQL> 
+SQL> insert into lineItems values ('1', 'A0', 'pbk', 1, 2.99);
+
+1 row created.
+
+SQL> insert into lineItems values ('8', 'A3', 'pbk', 2, 3.99);
+
+1 row created.
+
+SQL> insert into lineItems values ('3', 'A2', 'pbk', 5, 5.99);
+
+1 row created.
+
+SQL> insert into lineItems values ('2', 'A2', 'pbk', 3, 3.99);
+
+1 row created.
+
+SQL> insert into lineItems values ('1', 'C1', 'ebk', 2, 2.99);
+
+1 row created.
+
+SQL> insert into lineItems values ('3', 'C2', 'hbk', 4, 2.99);
+
+1 row created.
+
+SQL> insert into lineItems values ('3', 'A3', 'pbk', 8, 3.99);
+
+1 row created.
+
+SQL> insert into lineItems values ('4', 'B1', 'hbk', 3, 4.99);
+
+1 row created.
+
+SQL> insert into lineItems values ('6', 'B1', 'hbk', 2, 6.99);
+
+1 row created.
+
+SQL> insert into lineItems values ('5', 'A2', 'pbk', 1, 2.99);
+
+1 row created.
+
+SQL> insert into lineItems values ('7', 'A1', 'pbk', 1, 1.99);
+
+1 row created.
+
+SQL>  -- causes the SQL statements themselves to be spooled
+SQL>  -- sends everything to <spoolfilename>
+SQL> 
+SQL> -- here you can set the SQL*Plus parameters, such as column width,
+SQL> -- that will allow the script to produce readable answers in the spool
+SQL> -- file
+SQL> 
+SQL> -- [body]
+SQL> 
+SQL> 
+SQL> 
+SQL> /* Task1 (a) */
+SQL> create or replace view customer_name_with_carts as
+  2  	     select distinct firstName, lastName
+  3  	     from customerInfo, orderCartInfo
+  4  	     where loginName = customerID;
+
+View created.
+
+SQL> select * from customer_name_with_carts;
+
+FIRSTNAME            LASTNAME                                                   
+-------------------- --------------------                                       
+Ophelia              Elsinore                                                   
+Mary                 Folio                                                      
+Percy                Byron                                                      
+
+SQL> 
+SQL> /* Task1 (b) */
+SQL> create or replace view item_in_inventory_need_reorder as
+  2  	     select distinct inventoryItem.itemNum, code, belongsTo, qtyInstock
+  3  	     from inventoryItem, itemType
+  4  	     where qtyInstock<25 and inventoryItem.itemNum = itemType.itemNum
+  5  	     order by itemNum;
+
+View created.
+
+SQL> select *from item_in_inventory_need_reorder;
+
+ITEMNUM    CODE                 BELONGSTO  QTYINSTOCK                           
+---------- -------------------- ---------- ----------                           
+A0         ebk                  P                  15                           
+C2         hbk                  H                  20                           
+
+SQL> 
+SQL> /* Task1 (c) */
+SQL> create or replace view customer_paid_in_each_order as
+  2  	     select distinct loginName, firstName, lastName, lineItems.orderCartId, sum(orderPrice) as totalPrice
+  3  	     from customerInfo, lineItems, orderCartInfo
+  4  	     where loginName=customerID and lineItems.orderCartId = orderCartInfo.orderCartId
+  5  	     group by loginName,firstName, lastName, lineItems.orderCartId
+  6  	     order by orderCartId;
+
+View created.
+
+SQL> select * from customer_paid_in_each_order;
+
+LOGINNAME  FIRSTNAME            LASTNAME             ORDERCARTI TOTALPRICE      
+---------- -------------------- -------------------- ---------- ----------      
+shkeandco  Mary                 Folio                1                5.98      
+dramab     Ophelia              Elsinore             2                3.99      
+astrab     Percy                Byron                3               12.97      
+astrab     Percy                Byron                4                4.99      
+shkeandco  Mary                 Folio                5                2.99      
+shkeandco  Mary                 Folio                6                6.99      
+dramab     Ophelia              Elsinore             7                1.99      
+astrab     Percy                Byron                8                3.99      
+
+8 rows selected.
+
+SQL> 
+SQL> /* Task1 (d) */
+SQL> create or replace view customer_paid_in_total as
+  2  	     select distinct loginName, firstName, lastName, sum(totalPrice) as totalPrices
+  3  	     from customer_paid_in_each_order
+  4  	     group by loginName, firstName, lastName
+  5  	     order by loginName;
+
+View created.
+
+SQL> select * from customer_paid_in_total;
+
+LOGINNAME  FIRSTNAME            LASTNAME             TOTALPRICES                
+---------- -------------------- -------------------- -----------                
+astrab     Percy                Byron                      21.95                
+dramab     Ophelia              Elsinore                    5.98                
+shkeandco  Mary                 Folio                      15.96                
+
+SQL> 
+SQL> /* Task1 (e) */
+SQL> create or replace view number_of_carts_per_customer as
+  2  	     select distinct customerID, count(orderCartId) as num
+  3  	     from orderCartInfo
+  4  	     group by customerID
+  5  	     order by customerID;
+
+View created.
+
+SQL> select customerID,
+  2  	     case
+  3  	     when num <= 2 then 'BR-1 satisfied'
+  4  	     else 'BR-1 violated'
+  5  	     end
+  6  	     "OUTCOME"
+  7  	     from number_of_carts_per_customer;
+
+CUSTOMERID OUTCOME                                                              
+---------- --------------                                                       
+astrab     BR-1 violated                                                        
+dramab     BR-1 satisfied                                                       
+shkeandco  BR-1 violated                                                        
+
+SQL> 
+SQL> /* Task1 (f) */
+SQL> select itemNum, itemColor, itemSize
+  2  from (
+  3  	     select itemNum, itemColor,itemSize,
+  4  	     case
+  5  	     when typeNum <= 1 then 'BR-2 satisfied'
+  6  	     else 'BR-2 violated'
+  7  	     end
+  8  	     "OUTCOME"
+  9  	     from(
+ 10  		     select itemNum, itemColor, itemSize, count(*) as typeNum
+ 11  		     from inventoryItem
+ 12  		     group by itemNum,itemColor,itemSize
+ 13  		     order by itemNum
+ 14  	     )
+ 15  )
+ 16  where OUTCOME = 'BR-2 violated';
+
+ITEMNUM    ITEMCOLOR         ITEMSIZE                                           
+---------- --------------- ----------                                           
+A0         green                    4                                           
+C2         black                    3                                           
+
+SQL> 
+SQL> /* Task1 (g) */
+SQL> select * from itemType;
+
+ITEMNUM    NAME                                                                 
+---------- --------------------                                                 
+PICTURE                                                 PRICE BELONGSTO         
+-------------------------------------------------- ---------- ----------        
+A0         The Anarchy of Mask                                                  
+***                                                     10.99 P                 
+                                                                                
+A1         The Butler Did                                                       
+---                                                     11.99 C                 
+                                                                                
+A2         The Abolished Man                                                    
+===                                                     15.99 SF                
+                                                                                
+
+ITEMNUM    NAME                                                                 
+---------- --------------------                                                 
+PICTURE                                                 PRICE BELONGSTO         
+-------------------------------------------------- ---------- ----------        
+A3         Lyrical Bullets                                                      
++-+-                                                    20.99 P                 
+                                                                                
+B1         The Postlude                                                         
+=\=\=                                                   34.99 P                 
+                                                                                
+C1         The August of Guns                                                   
+**--                                                    10.99 H                 
+                                                                                
+
+ITEMNUM    NAME                                                                 
+---------- --------------------                                                 
+PICTURE                                                 PRICE BELONGSTO         
+-------------------------------------------------- ---------- ----------        
+C2         The Expectant Mirror                                                 
+^-^                                                     12.99 H                 
+                                                                                
+
+7 rows selected.
+
+SQL> 
+SQL> create or replace trigger raise_insert_error
+  2  	     after insert or update
+  3  	     on itemType
+  4  	     declare
+  5  	     fourTimeMinPrice float;
+  6  	     maxPrice float;
+  7  	     begin
+  8  	     select 4*min(price) into fourTimeMinPrice from itemType;
+  9  	     select max(price) into maxPrice from itemType;
+ 10  	     if (maxPrice>fourTimeMinPrice) then
+ 11  	     raise_application_error
+ 12  	     (-20101,'Cannot insert/update because the new price is larger than 4 times of minimun price in table.');
+ 13  	     rollback;
+ 14  	     end if;
+ 15  	     end;
+ 16  /
+
+Trigger created.
+
+SQL> 
+SQL> insert into itemType values ('C3', 'Google Autonomous Car', '(｡•ˇ‸ˇ•｡)', 79999.99, 'SF');
+insert into itemType values ('C3', 'Google Autonomous Car', '(｡•ˇ‸ˇ•｡)', 79999.99, 'SF')
+                                   *
+ERROR at line 1:
+ORA-12899: value too large for column "MFBYABY3"."ITEMTYPE"."NAME" (actual: 21, 
+maximum: 20) 
+
+
+SQL> insert into itemType values ('C4', 'SpeaceX Falcon99', ' (´・ω・｀)', 7999999.99, 'SF');
+insert into itemType values ('C4', 'SpeaceX Falcon99', ' (´・ω・｀)', 7999999.99, 'SF')
+            *
+ERROR at line 1:
+ORA-20101: Cannot insert/update because the new price is larger than 4 times of 
+minimun price in table. 
+ORA-06512: at "MFBYABY3.RAISE_INSERT_ERROR", line 8 
+ORA-04088: error during execution of trigger 'MFBYABY3.RAISE_INSERT_ERROR' 
+
+
+SQL> update itemType set price = 100 where name = 'The Postlude';
+update itemType set price = 100 where name = 'The Postlude'
+       *
+ERROR at line 1:
+ORA-20101: Cannot insert/update because the new price is larger than 4 times of 
+minimun price in table. 
+ORA-06512: at "MFBYABY3.RAISE_INSERT_ERROR", line 8 
+ORA-04088: error during execution of trigger 'MFBYABY3.RAISE_INSERT_ERROR' 
+
+
+SQL> 
+SQL> start /opt/info/courses/COMP23111/drop-Eclectic-Ecommerce-tables.sql
+SQL> drop table lineItems;
+
+Table dropped.
+
+SQL> drop table inventoryItem;
+
+Table dropped.
+
+SQL> drop table itemType;
+
+Table dropped.
+
+SQL> drop table category;
+
+Table dropped.
+
+SQL> drop table orderCartInfo;
+
+Table dropped.
+
+SQL> drop table customerInfo;
+
+Table dropped.
+
+SQL> SPOOL OFF

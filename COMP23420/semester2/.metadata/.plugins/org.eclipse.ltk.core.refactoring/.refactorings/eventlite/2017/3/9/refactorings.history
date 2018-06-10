@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;index.html.hbs&apos; to &apos;events&apos;&#x0A;- Original project: &apos;eventlite&apos;&#x0A;- Destination element: &apos;events&apos;&#x0A;- Original element: &apos;index.html.hbs&apos;" description="Copy file" element1="src/main/resources/templates/events/index.html.hbs" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1488662720326" target="/eventlite/src/main/resources/templates/events" units="0" version="1.0"/>
+</session>

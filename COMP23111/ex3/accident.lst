@@ -1,0 +1,118 @@
+SQL> 
+SQL> /* Task2 (a i.) */
+SQL> select count(report_number) from participated where driver_id =
+  2  (select driver_id from person where name = 'Jane Rowling');
+
+COUNT(REPORT_NUMBER)                                                            
+--------------------                                                            
+                   2                                                            
+
+SQL> 
+SQL> /* Task2 (a ii.) */
+SQL> update participated set damage_amount = 2500
+  2  where license = 'KUY 629' and report_number = 7897423;
+
+1 row updated.
+
+SQL> 
+SQL> /* Task2 (a iii.) */
+SQL> select name from person where driver_id in
+  2  	 (select driver_id from
+  3  	 (select driver_id, sum(damage_amount) from participated
+  4  	 group by driver_id
+  5  	 having sum(damage_amount)>3000));
+
+NAME                                                                            
+--------------------                                                            
+Jane Rowling                                                                    
+William Hardy                                                                   
+Kelly Woolf                                                                     
+
+SQL> 
+SQL> /* Task2 (a iv.) */
+SQL> create or replace view average_damage_per_location as
+  2  	 select distinct accident.location, avg(participated.damage_amount) as avg_location_damage
+  3  	 from accident, participated
+  4  	 where accident.report_number = participated.report_number
+  5  	 group by accident.location;
+
+View created.
+
+SQL> 
+SQL> /* Task2 (a v.) */
+SQL> select location as higest_dam_location from average_damage_per_location where avg_location_damage =
+  2  (select max(avg_location_damage) from average_damage_per_location);
+
+HIGEST_DAM_LOCATION                                                             
+--------------------                                                            
+Stockport                                                                       
+
+SQL> 
+SQL> start /opt/info/courses/COMP23111/drop-University-tables.sql;
+SQL> drop table prereq;
+
+Table dropped.
+
+SQL> drop table time_slot;
+
+Table dropped.
+
+SQL> drop table advisor;
+
+Table dropped.
+
+SQL> drop table takes;
+
+Table dropped.
+
+SQL> drop table student;
+
+Table dropped.
+
+SQL> drop table teaches;
+
+Table dropped.
+
+SQL> drop table section;
+
+Table dropped.
+
+SQL> drop table instructor;
+
+Table dropped.
+
+SQL> drop table course;
+
+Table dropped.
+
+SQL> drop table department;
+
+Table dropped.
+
+SQL> drop table classroom;
+
+Table dropped.
+
+SQL> 
+SQL>  start /opt/info/courses/COMP23111/drop-Accident-tables.sql;
+SQL> drop table participated;
+
+Table dropped.
+
+SQL> drop table owns;
+
+Table dropped.
+
+SQL> drop table accident;
+
+Table dropped.
+
+SQL> drop table car;
+
+Table dropped.
+
+SQL> drop table person;
+
+Table dropped.
+
+SQL> SPOOL OFF

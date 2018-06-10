@@ -1,0 +1,17 @@
+Start:	LDA Y
+	ADD NegOne
+	STO Y
+	JGE Loop
+	JMP end
+
+Loop:	LDA Result
+	ADD X
+	STO Result
+	JMP Start
+
+end:	STP
+
+X:	12
+Y:	2
+NegOne:	-1
+Result:	0

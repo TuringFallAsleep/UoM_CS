@@ -1,0 +1,14 @@
+INDEX VERSION 1.127+/home/mfbyaby3/COMP25111/ex3/.metadata/.plugins/org.eclipse.jdt.core
+4023805291.index
+1797338927.index
+186432538.index
+338102957.index
+3676971731.index
+450197447.index
+2846457805.index
+4058871450.index
+1843117898.index
+4287360845.index
+1756919824.index
+4089834214.index
+517208485.index

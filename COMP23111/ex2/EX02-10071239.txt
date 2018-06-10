@@ -1,0 +1,93 @@
+Manager (manager_ID,name) :
+pk[manager_ID]
+
+ManPhone (manager_ID,telephone) :
+pk[manager_ID,telephone],
+fk[manager_ID -> Manager.manager_ID]
+
+Artist (artistic_name,genre,managedBy) :
+pk[artistic_name],
+fk[managedBy -> Manager.manager_ID]
+
+GroupArtist (artistic_name,genre,date_formed) :
+pk[artistic_name],
+fk[artistic_name -> Artist.artistic_name]
+
+SoloArtist (artistic_name,genre,real_name,performs_since) :
+pk[artistic_name],
+fk[artistic_name -> Artist.artistic_name]
+
+HasMember (date_joined,artistic_name,artistic_name) :
+pk[date_joined],
+fk[artistic_name -> GroupArtist.artistic_name,
+artistic_name -> SoloArtist.artistic_name]
+
+
+Album (album_ID,title,createdBy) :
+pk[album_ID],
+fk[createdBy -> Artist.artistic_name]
+
+VinylAlbum (album_ID, title) :
+pk[album_ID],
+fk[album_ID -> Album.album_ID,
+createdBy -> Artist.artistic_name]
+
+VinylColour (album_ID,colour) :
+pk[album_ID],
+fk[album_ID -> Album.album_ID,
+createdBy -> Artist.artistic_name]
+
+TapeAlbum (album_ID,title,label) :
+pk[album_ID],
+fk[album_ID -> Album.album_ID,
+createdBy -> Artist.artistic_name]
+
+CDAlbum (album_ID,title) :
+pk[album_ID],
+fk[album_ID -> Album.album_ID,
+createdBy -> Artist.artistic_name]
+
+CDExtra (album_ID,extra) :
+pk[album_ID],
+fk[album_ID -> Album.album_ID,
+createdBy -> Artist.artistic_name]
+
+HasTrack (album_ID,version,sequence) :
+pk[sequence],
+fk[album_ID -> Album.album_ID,
+version -> FinishedTrack.version]
+
+
+MasterTrack (trac_ID,working_title,working_length,recordedBy,editedBy) :
+pk[track_ID],
+fk[recordedBy -> Artist.artistic_name,
+editedBy -> SoundEngineer.sound_eng_id]
+
+SoundEngineer (sound_eng_ID,name) :
+pk[sound_eng_ID]
+
+ContractInfo (hasContract,date_from,date_to,
+duration [derived as (date_to - date_from)]) :
+pk[hasContract,date_from,date_to],
+fk[hasContract -> Artist.artistic_name]
+
+FinishedTrack (originatesFrom,version,released_title,final_length) :
+pk[originatesFrom,version],
+fk[originatesFrom -> MasterTrack.track_ID]
+
+CatalogueEntry (listedAs,release_date,stock,price) :
+pk[listedAs,release_date],
+fk[listedAs -> Album.album_ID,
+comprises -> Orders.order_number]
+
+Orders (order_number,placed_on,dispatch_date) :
+pk[order_number],
+fk[placedBy -> Buyer.buyer_ID,
+comprises -> CatalogueEntry.release_date]
+
+comprises (order_number,release_date) :
+fk[order_number -> Orders.order_number,
+release_date -> CatalogueEntry.release_date]
+
+Buyer (buyer_ID,name,registed_on) :
+pk[buyer_ID]
